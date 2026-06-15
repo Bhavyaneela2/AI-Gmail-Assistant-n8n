@@ -1,0 +1,367 @@
+{
+  "name": "AI Gmail Assistant",
+  "nodes": [
+    {
+      "parameters": {
+        "authentication": "basicAuth",
+        "formTitle": "AI Email Assistant",
+        "formDescription": "Generate professional AI-powered emails instantly. Enter the recipient details, purpose, and tone, and receive a polished email ready to send.",
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "Recipient Name"
+            },
+            {
+              "fieldLabel": "Recipient Email",
+              "fieldType": "email"
+            },
+            {
+              "fieldLabel": "Purpose",
+              "fieldType": "textarea"
+            },
+            {
+              "fieldLabel": "Tone",
+              "fieldType": "radio",
+              "fieldOptions": {
+                "values": [
+                  {
+                    "option": "Sales"
+                  },
+                  {
+                    "option": "Professional"
+                  },
+                  {
+                    "option": "Friendly"
+                  },
+                  {
+                    "option": "Formal"
+                  },
+                  {
+                    "option": "Casual"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        "options": {
+          "buttonLabel": "Submit"
+        }
+      },
+      "type": "n8n-nodes-base.formTrigger",
+      "typeVersion": 2.5,
+      "position": [
+        -192,
+        16
+      ],
+      "id": "2011a5c0-2787-4034-9210-80b8f4d5b092",
+      "name": "On form submission",
+      "webhookId": "624b1584-7fe1-4697-9312-dcf243640711",
+      "credentials": {
+        "httpBasicAuth": {
+          "id": "PXM9GJzhkRRqMdp4",
+          "name": "Unnamed credential"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $('On form submission').item.json['Recipient Email'] }}",
+        "subject": "AI Generated Email",
+        "emailType": "text",
+        "message": "={{ $json.content.parts[0].text }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        720,
+        16
+      ],
+      "id": "3b9f4c41-581d-4eb5-9458-68f442ca21ec",
+      "name": "Send a message",
+      "webhookId": "ad700777-0be4-4252-bd32-41e045357d19",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "PjI8ukKCTYcknuBR",
+          "name": "Gmail OAuth2 API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1IZGq5dk99f32hBBZBgIrErn1z2mpxGgRCTSeOG9fSBs",
+          "mode": "list",
+          "cachedResultName": "AI Gmail Assistant",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1IZGq5dk99f32hBBZBgIrErn1z2mpxGgRCTSeOG9fSBs/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1IZGq5dk99f32hBBZBgIrErn1z2mpxGgRCTSeOG9fSBs/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Recipient Name": "={{ $('On form submission').item.json[\"Recipient Name\"] }}",
+            "Recipient Email": "={{ $('On form submission').item.json[\"Recipient Email\"] }}",
+            "Purpose": "={{ $('On form submission').item.json[\"Purpose\"] }}",
+            "Tone": "={{ $('On form submission').item.json[\"Tone\"] }}",
+            "Generated Email": "={{ $('Message a model').item.json.content.parts[0].text }}",
+            "Status": "={{ \"sent\" }}",
+            "Date": "={{ $now }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Recipient Name",
+              "displayName": "Recipient Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Recipient Email",
+              "displayName": "Recipient Email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Purpose",
+              "displayName": "Purpose",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Tone",
+              "displayName": "Tone",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Generated Email",
+              "displayName": "Generated Email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Status",
+              "displayName": "Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Date",
+              "displayName": "Date",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        928,
+        16
+      ],
+      "id": "cb070a08-71cc-4789-b69b-7be4a4bae077",
+      "name": "Append row in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "aXOQ1VZDKTpVVLYk",
+          "name": "Google Sheets OAuth2 API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "completion",
+        "completionTitle": "Submission Received",
+        "completionMessage": "Thank you for submitting the form. Your response has been recorded.",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.form",
+      "typeVersion": 2.5,
+      "position": [
+        1136,
+        16
+      ],
+      "id": "a4644584-d239-4bc5-96f0-e9a0466f5eef",
+      "name": "Form",
+      "webhookId": "cbc5721b-7647-43ae-b5c1-94833dafb8a1"
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "models/gemini-3.1-flash-lite",
+          "mode": "list",
+          "cachedResultName": "models/gemini-3.1-flash-lite"
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "=Write a professional email.\n\nRecipient Name: {{ $json[\"Recipient Name\"] }}\nPurpose: {{ $json[\"Purpose\"] }}\nTone: {{ $json[\"Tone\"] }}\n\nEnd the email with:\n\nBest regards,\nAI Email Assistant\n"
+            }
+          ]
+        },
+        "builtInTools": {},
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.googleGemini",
+      "typeVersion": 1.2,
+      "position": [
+        16,
+        16
+      ],
+      "id": "43737649-33e0-45fd-8f70-4edc1a396393",
+      "name": "Message a model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "lbgTMOhbXsOHbngc",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "models/gemini-3.1-flash-lite",
+          "mode": "list",
+          "cachedResultName": "models/gemini-3.1-flash-lite"
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "=Create a professional email.\n\nName: {{ $json.name || \"Participant\" }}\nEvent Name: {{ $json.eventName || \"Tech Innovation Summit 2026\" }}\nDate: {{ $json.date || \"July 15, 2026\" }}\nTime: {{ $json.time || \"10:00 AM\" }}\nLocation: {{ $json.location || \"Hyderabad Convention Center\" }}\n\nIf any value is missing, use the fallback value provided above.\nNever output \"undefined\", \"null\", or empty placeholders."
+            }
+          ]
+        },
+        "builtInTools": {},
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.googleGemini",
+      "typeVersion": 1.2,
+      "position": [
+        368,
+        16
+      ],
+      "id": "fcb37555-4873-42b4-92a8-e65e0d961ac5",
+      "name": "Message a model1",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "lbgTMOhbXsOHbngc",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "On form submission": {
+      "main": [
+        [
+          {
+            "node": "Message a model",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send a message": {
+      "main": [
+        [
+          {
+            "node": "Append row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Append row in sheet": {
+      "main": [
+        [
+          {
+            "node": "Form",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Message a model": {
+      "main": [
+        [
+          {
+            "node": "Message a model1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Message a model1": {
+      "main": [
+        [
+          {
+            "node": "Send a message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "a3b8b8b8-bd89-48c7-ab1c-513f3fd2b22b",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "3c8ae31e66e7294b8a88a8e22e02ddcb1ce9a6e5410dcbbb97e475bddb83f16a"
+  },
+  "nodeGroups": [],
+  "id": "aEsg8x7QQRb3idN9",
+  "tags": []
+}
