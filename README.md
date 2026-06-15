@@ -1,3 +1,8 @@
+
+
+https://github.com/user-attachments/assets/ab61fe6c-71ec-4d23-a149-9edceda54b1b
+
+
 # AI Gmail Assistant using n8n & Google Gemini
 
 ## Overview
